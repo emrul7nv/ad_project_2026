@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import RegistrationView from '../views/RegistrationView.vue'
 import OrdersView from '../views/OrdersView.vue'
 import NewAdView from '../views/NewAdView.vue'
+import AdListView from '../views/AdListView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/new',
     name: 'newAd',
     component: NewAdView
+  },
+  {
+    path: '/list',
+    name: 'list',
+    component: AdListView
   }
 ]
 
