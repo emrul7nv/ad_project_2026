@@ -6,7 +6,7 @@
         <v-col cols="12">
           <v-carousel>
             <v-carousel-item
-              v-for="ad in ads"
+              v-for="ad in promoAds"
               :key="ad.id"
               :src="ad.src"
               cover
@@ -59,38 +59,12 @@
 <script>
 export default {
   name: 'HomeView',
-  data() {
-    return {
-      ads: [
-        {
-          title: "French Avenue - Oud Satin",
-          desc: "Роскошный аромат с нотами уда, розы и ванили",
-          promo: true,
-          src: "https://picsum.photos/id/100/400/300",
-          id: "1"
-        },
-        {
-          title: "French Avenue - Amber Oud",
-          desc: "Теплый янтарный аромат с древесными оттенками",
-          promo: true,
-          src: "https://picsum.photos/id/101/400/300",
-          id: "2"
-        },
-        {
-          title: "French Avenue - Vetiver Noir",
-          desc: "Свежий ветиверовый аромат с цитрусовыми нотами",
-          promo: true,
-          src: "https://picsum.photos/id/102/400/300",
-          id: "3"
-        },
-        {
-          title: "French Avenue - Leather Rush",
-          desc: "Кожаный аромат с пряными и древесными акцентами",
-          promo: true,
-          src: "https://picsum.photos/id/103/400/300",
-          id: "4"
-        }
-      ]
+  computed: {
+    promoAds() {
+      return this.$store.getters.promoAds
+    },
+    ads() {
+      return this.$store.getters.ads
     }
   }
 }

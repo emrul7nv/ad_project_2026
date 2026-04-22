@@ -2,20 +2,16 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card class="mt-5">
+        <v-card class="mt-5" v-if="ad">
           <v-img
             height="400px"
-            src="https://picsum.photos/id/100/800/400"
+            :src="ad.src"
             cover
           ></v-img>
           
           <v-card-text>
-            <h1 class="text--primary mb-3">French Avenue - Oud Satin</h1>
-            <p>
-              Роскошный аромат с нотами уда, розы и ванили. 
-              Очень стойкий и насыщенный парфюм для особых случаев.
-              Идеально подходит для вечерних выходов и холодного времени года.
-            </p>
+            <h1 class="text--primary mb-3">{{ ad.title }}</h1>
+            <p>{{ ad.desc }}</p>
           </v-card-text>
           
           <v-card-actions>
@@ -24,6 +20,10 @@
             <v-btn class="success" color="green">Buy</v-btn>
           </v-card-actions>
         </v-card>
+        
+        <div v-else class="text-center mt-5">
+          <h2>Ad not found</h2>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -31,6 +31,12 @@
 
 <script>
 export default {
-  name: 'AdView'
+  name: 'AdView',
+  props: ['id'],
+  computed: {
+    ad() {
+      return this.$store.getters.adById(this.id)
+    }
+  }
 }
 </script>

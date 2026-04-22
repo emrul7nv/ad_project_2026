@@ -5,7 +5,7 @@
         <h1 class="text--secondary mb-3 mt-3">My ads</h1>
         
         <v-card 
-          v-for="ad in ads" 
+          v-for="ad in myAds" 
           :key="ad.id" 
           class="mb-3" 
           max-width="1000"
@@ -44,38 +44,9 @@
 <script>
 export default {
   name: 'AdListView',
-  data() {
-    return {
-      ads: [
-        {
-          title: "French Avenue - Oud Satin",
-          desc: "Роскошный аромат с нотами уда, розы и ванили. Очень стойкий и насыщенный парфюм для особых случаев.",
-          promo: true,
-          src: "https://picsum.photos/id/100/400/300",
-          id: "1"
-        },
-        {
-          title: "French Avenue - Amber Oud",
-          desc: "Теплый янтарный аромат с древесными оттенками",
-          promo: true,
-          src: "https://picsum.photos/id/101/400/300",
-          id: "2"
-        },
-        {
-          title: "French Avenue - Vetiver Noir",
-          desc: "Свежий ветиверовый аромат с цитрусовыми нотами",
-          promo: true,
-          src: "https://picsum.photos/id/102/400/300",
-          id: "3"
-        },
-        {
-          title: "French Avenue - Leather Rush",
-          desc: "Кожаный аромат с пряными и древесными акцентами",
-          promo: true,
-          src: "https://picsum.photos/id/103/400/300",
-          id: "4"
-        }
-      ]
+  computed: {
+    myAds() {
+      return this.$store.getters.myAds
     }
   }
 }
