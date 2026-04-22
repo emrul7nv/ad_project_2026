@@ -18,6 +18,7 @@
         <v-list-item
           v-for="link in links"
           :key="link.title"
+          :to="link.url"
         >
           <template v-slot:prepend>
             <span style="font-size: 20px;">{{ link.icon }}</span>
@@ -34,6 +35,7 @@
         <v-btn
           v-for="link in links"
           :key="link.title"
+          :to="link.url"
         >
           <span style="margin-right: 8px;">{{ link.icon }}</span>
           {{ link.title }}
