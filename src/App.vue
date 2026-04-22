@@ -15,11 +15,14 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-item>
+        <v-list-item
+          v-for="link in links"
+          :key="link.title"
+        >
           <template v-slot:prepend>
-            <v-icon>🍰</v-icon>
+            <span style="font-size: 20px;">{{ link.icon }}</span>
           </template>
-          <v-list-item-title>Link One</v-list-item-title>
+          <v-list-item-title>{{ link.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -28,12 +31,13 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn>
-          <v-icon start>🍰</v-icon>
-          Link One
+        <v-btn
+          v-for="link in links"
+          :key="link.title"
+        >
+          <span style="margin-right: 8px;">{{ link.icon }}</span>
+          {{ link.title }}
         </v-btn>
-        <v-btn>Link Two</v-btn>
-        <v-btn>Link Three</v-btn>
       </v-toolbar-items>
     </v-app-bar>
 
@@ -48,7 +52,14 @@ export default {
   name: 'App',
   data() {
     return {
-      drawer: false
+      drawer: false,
+      links: [
+        { title: "Login", icon: "🔒", url: "/login" },
+        { title: "Registration", icon: "📝", url: "/registration" },
+        { title: "Orders", icon: "📦", url: "/orders" },
+        { title: "New ad", icon: "➕", url: "/new" },
+        { title: "My ads", icon: "📋", url: "/list" }
+      ]
     }
   }
 }
