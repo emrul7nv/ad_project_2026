@@ -97,13 +97,20 @@ export default {
           promo: this.promo,
           src: "https://picsum.photos/id/100/400/300"
         }
-        console.log('New ad:', ad)
+        
+        // Отправляем в store
+        this.$store.dispatch('createAd', ad)
+        
+        console.log('Ad created and saved to store:', ad)
         
         // Очистка формы
         this.title = ""
         this.description = ""
         this.promo = false
         this.$refs.form.reset()
+        
+        // Перенаправление на главную страницу
+        this.$router.push('/')
       }
     }
   }
