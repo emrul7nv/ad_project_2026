@@ -38,18 +38,23 @@ export default {
     mutations: {
         createAd(state, payload) {
             state.ads.push(payload)
+        },
+        updateAd(state, { title, desc, id }) {
+            const ad = state.ads.find(a => a.id === id)
+            if (ad) {
+                ad.title = title
+                ad.desc = desc
+            }
         }
     },
     actions: {
         async createAd({ commit, getters }, payload) {
-            // Добавляем id и userId текущего пользователя
             payload.id = Date.now().toString()
             payload.userId = getters.user ? getters.user.id : '1'
 
             commit('clearError', null, { root: true })
             commit('setLoading', true, { root: true })
 
-            // Имитация запроса к серверу
             const promise = new Promise((resolve) => {
                 setTimeout(() => resolve('Success'), 2000)
             })
@@ -63,6 +68,25 @@ export default {
                 commit('setLoading', false, { root: true })
                 commit('setError', 'Ошибка создания объявления', { root: true })
                 console.error('Create ad error:', error)
+            }
+        },
+        async updateAd({ commit }, { title, desc, id }) {
+            commit('clearError', null, { root: true })
+            commit('setLoading', true, { root: true })
+
+            const promise = new Promise((resolve) => {
+                setTimeout(() => resolve('Success'), 2000)
+            })
+
+            try {
+                await promise
+                commit('updateAd', { title, desc, id })
+                commit('setLoading', false, { root: true })
+                console.log('Ad updated:', { id, title, desc })
+            } catch (error) {
+                commit('setLoading', false, { root: true })
+                commit('setError', 'Ошибка редактирования объявления', { root: true })
+                console.error('Update ad error:', error)
             }
         }
     },

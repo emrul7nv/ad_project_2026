@@ -2,7 +2,14 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card class="mt-5" v-if="ad">
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          color="primary"
+          class="d-block mx-auto my-5"
+        ></v-progress-circular>
+        
+        <v-card class="mt-5" v-else-if="ad">
           <v-img
             height="400px"
             :src="ad.src"
@@ -16,7 +23,10 @@
           
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="warning" color="orange">Edit</v-btn>
+            <EditAdModal
+              :ad="ad"
+              v-if="isOwner"
+            />
             <v-btn class="success" color="green">Buy</v-btn>
           </v-card-actions>
         </v-card>
@@ -30,12 +40,24 @@
 </template>
 
 <script>
+import EditAdModal from './Ads/EditAdModal.vue'
+
 export default {
   name: 'AdView',
+  components: {
+    EditAdModal
+  },
   props: ['id'],
   computed: {
+    loading() {
+      return this.$store.getters.loading
+    },
     ad() {
       return this.$store.getters.adById(this.id)
+    },
+    isOwner() {
+      const user = this.$store.getters.user
+      return user && this.ad && this.ad.userId === user.id
     }
   }
 }
