@@ -21,7 +21,15 @@
           :to="link.url"
         >
           <template v-slot:prepend>
-            <span style="font-size: 20px;">{{ link.icon }}</span>
+            <v-badge
+              v-if="link.title === 'Orders' && pendingOrdersCount > 0"
+              :content="pendingOrdersCount"
+              color="error"
+              overlap
+            >
+              <span style="font-size: 20px;">{{ link.icon }}</span>
+            </v-badge>
+            <span v-else style="font-size: 20px;">{{ link.icon }}</span>
           </template>
           <v-list-item-title>{{ link.title }}</v-list-item-title>
         </v-list-item>
@@ -53,7 +61,15 @@
           :key="link.title"
           :to="link.url"
         >
-          <span style="margin-right: 8px;">{{ link.icon }}</span>
+          <v-badge
+            v-if="link.title === 'Orders' && pendingOrdersCount > 0"
+            :content="pendingOrdersCount"
+            color="error"
+            overlap
+          >
+            <span style="margin-right: 8px;">{{ link.icon }}</span>
+          </v-badge>
+          <span v-else style="margin-right: 8px;">{{ link.icon }}</span>
           {{ link.title }}
         </v-btn>
         
@@ -116,6 +132,11 @@ export default {
           { title: "Registration", icon: "📝", url: "/registration" }
         ]
       }
+    },
+    pendingOrdersCount() {
+      if (!this.isUserLoggedIn) return 0
+      const orders = this.$store.getters.orders || []
+      return orders.filter(o => !o.done).length
     },
     errorMessage() {
       return this.$store.getters.error
