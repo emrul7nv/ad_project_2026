@@ -66,7 +66,8 @@
             <v-btn
               color="success"
               @click="createAd"
-              :disabled="!valid"
+              :disabled="!valid || loading"
+              :loading="loading"
             >
               Create Ad
             </v-btn>
@@ -88,6 +89,11 @@ export default {
       promo: false
     }
   },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
+    }
+  },
   methods: {
     createAd() {
       if (this.$refs.form.validate()) {
@@ -98,20 +104,18 @@ export default {
           src: "https://picsum.photos/id/100/400/300"
         }
         
-        // Отправляем в store
         this.$store.dispatch('createAd', ad)
-        
-        console.log('Ad created and saved to store:', ad)
-        
-        // Очистка формы
-        this.title = ""
-        this.description = ""
-        this.promo = false
-        this.$refs.form.reset()
-        
-        // Перенаправление на главную страницу
-        this.$router.push('/')
+          .then(() => {
+            this.$router.push('/list')
+            this.resetForm()
+          })
       }
+    },
+    resetForm() {
+      this.title = ""
+      this.description = ""
+      this.promo = false
+      this.$refs.form.reset()
     }
   }
 }

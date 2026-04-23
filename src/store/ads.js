@@ -41,9 +41,29 @@ export default {
         }
     },
     actions: {
-        createAd({ commit }, payload) {
+        async createAd({ commit, getters }, payload) {
+            // Добавляем id и userId текущего пользователя
             payload.id = Date.now().toString()
-            commit('createAd', payload)
+            payload.userId = getters.user ? getters.user.id : '1'
+
+            commit('clearError', null, { root: true })
+            commit('setLoading', true, { root: true })
+
+            // Имитация запроса к серверу
+            const promise = new Promise((resolve) => {
+                setTimeout(() => resolve('Success'), 2000)
+            })
+
+            try {
+                await promise
+                commit('createAd', payload)
+                commit('setLoading', false, { root: true })
+                console.log('Ad created:', payload)
+            } catch (error) {
+                commit('setLoading', false, { root: true })
+                commit('setError', 'Ошибка создания объявления', { root: true })
+                console.error('Create ad error:', error)
+            }
         }
     },
     getters: {
