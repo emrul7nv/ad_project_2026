@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
+
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegistrationView from '../views/RegistrationView.vue'
@@ -26,17 +28,20 @@ const routes = [
   {
     path: '/orders',
     name: 'orders',
-    component: OrdersView
+    component: OrdersView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/new',
     name: 'newAd',
-    component: NewAdView
+    component: NewAdView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/list',
     name: 'list',
-    component: AdListView
+    component: AdListView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/ad/:id',
@@ -49,6 +54,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+// Защита маршрутов
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isLoggedIn = store.getters.isUserLoggedIn
+
+  if (requiresAuth && !isLoggedIn) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router

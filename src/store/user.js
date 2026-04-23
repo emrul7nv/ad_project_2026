@@ -43,8 +43,6 @@ export default {
 
             try {
                 await promise
-
-                // Проверяем (временно: любой пользователь подходит)
                 const user = {
                     id: Date.now().toString(),
                     email: email,
@@ -53,12 +51,16 @@ export default {
                 commit('setUser', user)
                 commit('setLoading', false, { root: true })
                 console.log('User logged in:', user)
-
             } catch (error) {
                 commit('setLoading', false, { root: true })
                 commit('setError', 'Ошибка входа. Неверный email или пароль.', { root: true })
                 console.error('Login error:', error)
             }
+        },
+
+        logoutUser({ commit }) {
+            commit('setUser', null)
+            console.log('User logged out')
         }
     },
     getters: {

@@ -25,6 +25,16 @@
           </template>
           <v-list-item-title>{{ link.title }}</v-list-item-title>
         </v-list-item>
+        
+        <v-list-item
+          v-if="isUserLoggedIn"
+          @click="onLogout"
+        >
+          <template v-slot:prepend>
+            <span style="font-size: 20px;">🚪</span>
+          </template>
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -46,6 +56,14 @@
           <span style="margin-right: 8px;">{{ link.icon }}</span>
           {{ link.title }}
         </v-btn>
+        
+        <v-btn
+          v-if="isUserLoggedIn"
+          @click="onLogout"
+        >
+          <span style="margin-right: 8px;">🚪</span>
+          Logout
+        </v-btn>
       </v-toolbar-items>
     </v-app-bar>
 
@@ -53,7 +71,6 @@
       <router-view></router-view>
     </v-main>
 
-    <!-- Снекбар для ошибок -->
     <v-snackbar
       v-model="showError"
       multi-line
@@ -79,17 +96,27 @@ export default {
   name: 'App',
   data() {
     return {
-      drawer: false,
-      links: [
-        { title: "Login", icon: "🔒", url: "/login" },
-        { title: "Registration", icon: "📝", url: "/registration" },
-        { title: "Orders", icon: "📦", url: "/orders" },
-        { title: "New ad", icon: "➕", url: "/new" },
-        { title: "My ads", icon: "📋", url: "/list" }
-      ]
+      drawer: false
     }
   },
   computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn
+    },
+    links() {
+      if (this.isUserLoggedIn) {
+        return [
+          { title: "Orders", icon: "📦", url: "/orders" },
+          { title: "New ad", icon: "➕", url: "/new" },
+          { title: "My ads", icon: "📋", url: "/list" }
+        ]
+      } else {
+        return [
+          { title: "Login", icon: "🔒", url: "/login" },
+          { title: "Registration", icon: "📝", url: "/registration" }
+        ]
+      }
+    },
     errorMessage() {
       return this.$store.getters.error
     },
@@ -107,6 +134,10 @@ export default {
   methods: {
     closeError() {
       this.$store.dispatch('clearError')
+    },
+    onLogout() {
+      this.$store.dispatch('logoutUser')
+      this.$router.push('/')
     }
   }
 }
