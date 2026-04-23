@@ -46,7 +46,8 @@
             <v-btn 
               color="primary" 
               @click="onSubmit"
-              :disabled="!valid"
+              :disabled="!valid || loading"
+              :loading="loading"
             >
               Create Account
             </v-btn>
@@ -80,6 +81,11 @@ export default {
       ]
     }
   },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
+    }
+  },
   methods: {
     onSubmit() {
       if (this.$refs.form.validate()) {
@@ -88,17 +94,10 @@ export default {
           password: this.password
         }
         
-        // Отправляем в store
         this.$store.dispatch('registerUser', user)
-        
-        // Очистка формы
-        this.email = ""
-        this.password = ""
-        this.confirmPassword = ""
-        this.$refs.form.reset()
-        
-        // Перенаправление на главную страницу
-        this.$router.push('/')
+          .then(() => {
+            this.$router.push('/')
+          })
       }
     }
   }

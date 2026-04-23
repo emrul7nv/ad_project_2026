@@ -52,6 +52,25 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <!-- Снекбар для ошибок -->
+    <v-snackbar
+      v-model="showError"
+      multi-line
+      :timeout="3000"
+      color="error"
+    >
+      {{ errorMessage }}
+      <template v-slot:actions>
+        <v-btn
+          color="white"
+          variant="text"
+          @click="closeError"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -68,6 +87,26 @@ export default {
         { title: "New ad", icon: "➕", url: "/new" },
         { title: "My ads", icon: "📋", url: "/list" }
       ]
+    }
+  },
+  computed: {
+    errorMessage() {
+      return this.$store.getters.error
+    },
+    showError: {
+      get() {
+        return this.$store.getters.error !== null
+      },
+      set(value) {
+        if (!value) {
+          this.closeError()
+        }
+      }
+    }
+  },
+  methods: {
+    closeError() {
+      this.$store.dispatch('clearError')
     }
   }
 }
